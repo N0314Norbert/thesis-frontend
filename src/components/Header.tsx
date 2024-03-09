@@ -1,23 +1,24 @@
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import {
 	AppBar,
+	Button,
+	ButtonGroup,
+	Container,
+	CssBaseline,
+	IconButton,
+	TextField,
 	Toolbar,
 	Typography,
-	ButtonGroup,
-	Button,
-	CssBaseline,
-	TextField,
-	Container,
-	IconButton,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import Login from './Login';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import KeyCloakService from '../utils/keyCloak';
+import Login from './Login';
 import Profile from './Profile';
 function Header() {
 	const [accountOn, setAccount] = useState(false);
-	const isLoggedIn = useSelector((state) => state?.LoginReducer?.isLoggedIn);
+	const isLoggedIn = KeyCloakService.CheckAuth();
+	console.log(KeyCloakService.CheckAuth());
 	const accountClicked = () => {
 		setAccount((prev) => !prev);
 	};

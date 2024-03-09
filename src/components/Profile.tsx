@@ -1,44 +1,44 @@
-import { Box, Button, Container, CssBaseline, IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useDispatch, useSelector } from 'react-redux';
-import { sendLogout } from '../utils/apihandlers';
-import { logout } from '../store/loginReducer';
+import { Button, Container, CssBaseline, IconButton, Typography } from '@mui/material';
+import Cookies from 'js-cookie';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { RootState } from '../store/store';
+import KeyCloakService from '../utils/keyCloak';
 
 function Profile(props: any) {
-	const user = useSelector((state) => state?.LoginReducer?.user);
-	const dispatch = useDispatch();
+	const user = useSelector((state: RootState) => state.authReducer.user);
 
-	const handleLogout = async (event: React.FormEvent<HTMLFormElement>) => {
+	const handleLogout = async (event: any) => {
 		event.preventDefault();
-		const res = await sendLogout();
-		if (res) {
-			dispatch(logout());
-		}
+		Cookies.remove('Token');
+		Cookies.remove('Email');
+		KeyCloakService.Logout();
 	};
 	return (
-		<Container
-			sx={{ width: '400px', height: '220px', position: 'absolute', right: '450px', top: '80px', border: 'solid 1px' }}
-		>
-			<IconButton onClick={props.accountClicked} sx={{ position: 'absolute', right: '10px', marginTop: '8px' }}>
-				<CloseIcon sx={{ width: '20px', height: '20px' }} />
+		<Container className="profile">
+			<IconButton onClick={props.accountClicked} className="profile-button">
+				<CloseIcon className="profile-button-icon" />
 			</IconButton>
 			<CssBaseline>
-				<Box
-					sx={{
-						marginTop: 5,
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-					}}
-				>
+				<div className="profile-content">
 					<Typography variant="h6">{user}</Typography>
-					<Button type="submit" fullWidth color="secondary" variant="contained" sx={{ mt: 3 }}>
-						Check Cart
-					</Button>
-					<Button onClick={handleLogout} type="submit" fullWidth color="secondary" variant="contained" sx={{ mt: 3 }}>
+					<Link to="/cart">
+						<Button type="submit" fullWidth color="secondary" variant="contained" className="profile-content-button">
+							Check Cart
+						</Button>
+					</Link>
+					<Button
+						onClick={handleLogout}
+						type="submit"
+						fullWidth
+						color="secondary"
+						variant="contained"
+						className="profile-content-button"
+					>
 						Logout
 					</Button>
-				</Box>
+				</div>
 			</CssBaseline>
 		</Container>
 	);

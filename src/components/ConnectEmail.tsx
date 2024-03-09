@@ -5,26 +5,12 @@ function ConnectEmail(props: any) {
 	return (
 		<div>
 			<Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={props.overlay}>
-				<Container
-					sx={{
-						width: '600px',
-						position: 'fixed',
-						border: 'solid 1px',
-						textAlign: 'center',
-					}}
-				>
+				<Container className="contact-email">
 					<IconButton onClick={props.setOverlay} sx={{ position: 'absolute', right: '10px', marginTop: '8px' }}>
 						<CloseIcon sx={{ width: '20px', height: '20px' }} />
 					</IconButton>
 					<CssBaseline>
-						<Box
-							sx={{
-								marginTop: 5,
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'center',
-							}}
-						>
+						<Container className="contact-email-box">
 							<Typography variant="h5"> Please summarize your issue</Typography>
 							<Box component="form">
 								<TextField
@@ -53,7 +39,7 @@ function ConnectEmail(props: any) {
 									Send
 								</Button>
 							</Box>
-						</Box>
+						</Container>
 					</CssBaseline>
 				</Container>
 			</Backdrop>

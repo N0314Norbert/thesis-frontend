@@ -1,68 +1,56 @@
-import Header from '../components/Header';
+import { Container, CssBaseline } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { ProductData } from '../@types/types';
+import '../assets/styles/Products.css';
+import TransitionAlert from '../components/Alert';
 import Footer from '../components/Footer';
-import {
-	Box,
-	Card,
-	CardActions,
-	CardContent,
-	CardMedia,
-	Container,
-	CssBaseline,
-	IconButton,
-	Typography,
-} from '@mui/material';
-import wall from '../assets/WallFinished.png';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import Header from '../components/Header';
+import ProductCard from '../components/ProductCard';
+import useProductCount from '../hooks/useProductCount';
+import useProductData from '../hooks/useProductData';
+import { RootState } from '../store/store';
 
 function Products() {
-	const product = {
-		title: 'Test',
-		img: wall,
-		description: 'Test Test Test TestTest TestTest TestTest TestTest TestTest TestTest TestTest Test',
-		price: '10$',
+	const [alert, setAlert] = useState<boolean>(false);
+	const [page, setPage] = useState<number>(1);
+
+	const productNumber = useProductCount();
+	const data = useProductData(1 + (page - 1) * 9, page * 9, page);
+	const isLoggedIn = useSelector((state: RootState) => state.authReducer.isLoggedIn);
+
+	const handleToCart = (event: any) => {
+		event.preventDefault();
+		if (isLoggedIn) {
+			return;
+		}
+		setAlert(true);
 	};
-	let products = [product, product, product, product, product, product, product, product, product];
+
+	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+		setPage(value);
+	};
 	return (
 		<CssBaseline>
-			<Header></Header>
-			<Container maxWidth="xl" sx={{ minHeight: '90vh', background: '#444444' }}>
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'row',
-						flexWrap: 'wrap',
-						paddingTop: 20,
-						textAlign: 'center',
-						position: 'relative',
-						marginLeft: '9vw',
-					}}
-				>
-					{products.map((item) => {
-						return (
-							<Card sx={{ maxWidth: 360, textAlign: 'center', marginBottom: '50px' }}>
-								<CardMedia component="img" height="194" image={item.img} alt="Paella dish" />
-								<CardContent>
-									<Link to="/details">
-										<Button variant="text">
-											<Typography variant="h4">{item.title}</Typography>
-										</Button>
-									</Link>
-									<Typography>{item.description}</Typography>
-								</CardContent>
-								<CardActions disableSpacing>
-									<Typography variant="h4">{item.price}</Typography>
-									<IconButton aria-label="to-cart" sx={{ position: 'relative', marginLeft: '210px !important' }}>
-										<AddShoppingCartIcon />
-									</IconButton>
-								</CardActions>
-							</Card>
-						);
-					})}
-				</Box>
+			<Header />
+			<Container maxWidth="xl" className="products">
+				<div>
+					<div className="products-productList">
+						{data.map((item: ProductData) => {
+							return <ProductCard item={item} handleToCart={handleToCart} />;
+						})}
+					</div>
+				</div>
+				<Pagination
+					count={Math.ceil(productNumber / 9)}
+					page={page}
+					onChange={handleChange}
+					className="products-pagination"
+				/>
 			</Container>
-			<Footer></Footer>
+			<TransitionAlert open={alert} setOpen={setAlert} />
+			<Footer />
 		</CssBaseline>
 	);
 }

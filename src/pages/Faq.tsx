@@ -1,21 +1,15 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Container, CssBaseline, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Container, CssBaseline, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import '../assets/styles/Faq.css';
 
 function Faq() {
 	return (
 		<CssBaseline>
 			<Header></Header>
-			<Container maxWidth="xl" sx={{ height: '90vh', background: '#444444' }}>
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-						paddingTop: 20,
-					}}
-				>
+			<Container maxWidth="xl" className="container">
+				<div className="faq">
 					<Accordion TransitionProps={{ unmountOnExit: true }}>
 						<AccordionSummary aria-controls="panel1a-content" expandIcon={<AddIcon />}>
 							<Typography>Test</Typography>
@@ -49,7 +43,7 @@ function Faq() {
 							</Typography>
 						</AccordionDetails>
 					</Accordion>
-				</Box>
+				</div>
 			</Container>
 			<Footer></Footer>
 		</CssBaseline>

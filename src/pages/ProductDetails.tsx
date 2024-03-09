@@ -1,9 +1,9 @@
 import {
-	Box,
 	Button,
 	Container,
 	CssBaseline,
 	Paper,
+	Skeleton,
 	Table,
 	TableBody,
 	TableCell,
@@ -11,77 +11,66 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material';
-import wall from '../assets/WallFinished.png';
-import Header from '../components/Header';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import '../assets/styles/ProductDetails.css';
+import TransitionAlert from '../components/Alert';
 import Footer from '../components/Footer';
-import { Link } from 'react-router-dom';
+import Header from '../components/Header';
+import useLazyProductApi from '../hooks/useLazyProductApi';
+import { RootState } from '../store/store';
 
-function Product() {
-	const product = {
-		title: 'Test',
-		img: wall,
-		description: 'Test Test Test TestTest TestTest TestTest TestTest TestTest TestTest TestTest Test',
-		format: '.obj',
-		price: '10$',
+function ProductDetails() {
+	const { id } = useParams<{ id: any }>();
+	const isLoggedIn = useSelector((state: RootState) => state.authReducer.isLoggedIn);
+
+	const { data, isLoading } = useLazyProductApi(id);
+	const [alert, setAlert] = useState<boolean>(false);
+	const handleToCart = (event: any) => {
+		event.preventDefault();
+		if (isLoggedIn) {
+			return;
+		}
+		setAlert(true);
 	};
+	console.log(data);
 	return (
 		<CssBaseline>
-			<Header></Header>
-			<Container maxWidth="xl" sx={{ minHeight: '90vh', background: '#444444', textAlign: 'center' }}>
+			<Header />
+			<Container maxWidth="xl" className="container">
 				<Typography variant="h2" sx={{ paddingTop: 15 }}>
-					{product.title}
+					{isLoading ? <Skeleton width={350} height={50} /> : data[0]?.data.Title}
 				</Typography>
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'row',
-						flexWrap: 'wrap',
-						textAlign: 'center',
-						position: 'relative',
-						marginLeft: '9vw',
-						marginTop: 3,
-					}}
-				>
-					<Box sx={{ marginTop: '100px' }}>
-						<img src={wall} height="250px" />
-					</Box>
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							flexWrap: 'wrap',
-							textAlign: 'center',
-							position: 'relative',
-							margin: '100px',
-						}}
-					>
-						<TableContainer component={Paper}>
-							<Table sx={{ minWidth: 650 }} aria-label="details_table">
-								<TableBody>
-									<TableRow>
-										<TableCell>Description</TableCell>
-										<TableCell>{product.description}</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell>File format</TableCell>
-										<TableCell>{product.format}</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell>Price</TableCell>
-										<TableCell>{product.price}</TableCell>
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableContainer>
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'row',
-								flexWrap: 'wrap',
-								marginTop: 10,
-							}}
-						>
-							<Button variant="contained" sx={{ width: '200px', marginLeft: 10 }}>
+				<div className="productDetails">
+					<div className="productDetails-productImage">
+						{isLoading ? <Skeleton height={250} width={350} /> : <img src={data[0]?.image} height="250px" />}
+					</div>
+					<div className="productDetails-description">
+						{isLoading ? (
+							<Skeleton width={650} height={300} />
+						) : (
+							<TableContainer component={Paper}>
+								<Table className="productDetails-description-table" aria-label="details_table">
+									<TableBody>
+										<TableRow>
+											<TableCell>Description</TableCell>
+											<TableCell>{data[0]?.data.Description}</TableCell>
+										</TableRow>
+										<TableRow>
+											<TableCell>File format</TableCell>
+											<TableCell>{data[0]?.data.Format}</TableCell>
+										</TableRow>
+										<TableRow>
+											<TableCell>Price</TableCell>
+											<TableCell>{data[0]?.data.Price}</TableCell>
+										</TableRow>
+									</TableBody>
+								</Table>
+							</TableContainer>
+						)}
+						<div className="productDetails-description-buttons">
+							<Button onClick={handleToCart} variant="contained" sx={{ width: '200px', marginLeft: 10 }}>
 								Add to Cart
 							</Button>
 							<Link to="/productviewer">
@@ -89,12 +78,13 @@ function Product() {
 									View in 3D
 								</Button>
 							</Link>
-						</Box>
-					</Box>
-				</Box>
+						</div>
+					</div>
+				</div>
 			</Container>
-			<Footer></Footer>
+			<TransitionAlert open={alert} setOpen={setAlert} />
+			<Footer />
 		</CssBaseline>
 	);
 }
-export default Product;
+export default ProductDetails;

@@ -13,17 +13,19 @@ function CartTable(props: any) {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{props.cartItems.map((item: any, index: any) => (
-							<TableRow key={index}>
-								<TableCell>{item.title}</TableCell>
-								<TableCell>${item.price.toFixed(2)}</TableCell>
-								<TableCell>
-									<Button onClick={() => props.removeItem(item.id)} variant="contained">
-										Remove
-									</Button>
-								</TableCell>
-							</TableRow>
-						))}
+						{props?.cartItems?.map((item: any) => {
+							return (
+								<TableRow>
+									<TableCell>{item.Title}</TableCell>
+									<TableCell>€{item.Price}</TableCell>
+									<TableCell>
+										<Button onClick={() => props.removeItem(item.rowKey)} variant="contained">
+											Remove
+										</Button>
+									</TableCell>
+								</TableRow>
+							);
+						})}
 					</TableBody>
 				</Table>
 			</TableContainer>

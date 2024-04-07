@@ -12,7 +12,7 @@ function useLazyProductApi(id: string | number) {
 				params: { id: id },
 			});
 			if (response.status === 200) {
-				response.data.map(async (item) => {
+				response.data.forEach(async (item) => {
 					const imageResponse = await axios.get(import.meta.env.VITE_ENDPOINT + '/productimage', {
 						params: { id: item.Image },
 						responseType: 'arraybuffer',
@@ -32,7 +32,6 @@ function useLazyProductApi(id: string | number) {
 			}
 			setIsLoading(false);
 		};
-		console.log(data);
 		fetchData();
 	}, []);
 	return { data: data, isLoading: isLoading };

@@ -11,30 +11,32 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material';
+import Cookies from 'js-cookie';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import '../assets/styles/ProductDetails.css';
 import TransitionAlert from '../components/Alert';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import useLazyProductApi from '../hooks/useLazyProductApi';
-import { RootState } from '../store/store';
-
+import KeyCloakService from '../utils/keyCloak';
 function ProductDetails() {
 	const { id } = useParams<{ id: any }>();
-	const isLoggedIn = useSelector((state: RootState) => state.authReducer.isLoggedIn);
 
 	const { data, isLoading } = useLazyProductApi(id);
 	const [alert, setAlert] = useState<boolean>(false);
-	const handleToCart = (event: any) => {
+	const [success, setSuccess] = useState<boolean>(false);
+
+	const handleToCart = (event: any, key: string) => {
 		event.preventDefault();
-		if (isLoggedIn) {
+
+		if (KeyCloakService.CheckAuth()) {
+			const retrievedArray: string[] = JSON.parse(Cookies.get('Cart') || '[]');
+			Cookies.set('Cart', JSON.stringify(retrievedArray.concat(key)), { expires: 7 });
 			return;
 		}
 		setAlert(true);
 	};
-	console.log(data);
 	return (
 		<CssBaseline>
 			<Header />
@@ -70,10 +72,16 @@ function ProductDetails() {
 							</TableContainer>
 						)}
 						<div className="productDetails-description-buttons">
-							<Button onClick={handleToCart} variant="contained" sx={{ width: '200px', marginLeft: 10 }}>
+							<Button
+								onClick={(event: any) => {
+									handleToCart(event, data[0]?.data.rowKey);
+								}}
+								variant="contained"
+								sx={{ width: '200px', marginLeft: 10 }}
+							>
 								Add to Cart
 							</Button>
-							<Link to="/productviewer">
+							<Link to={`/productviewer/${data[0]?.data.File}`}>
 								<Button variant="contained" sx={{ width: '200px', marginLeft: 5 }}>
 									View in 3D
 								</Button>
@@ -82,7 +90,9 @@ function ProductDetails() {
 					</div>
 				</div>
 			</Container>
-			<TransitionAlert open={alert} setOpen={setAlert} />
+			<TransitionAlert open={alert} setOpen={setAlert} type={'error'} text={'Please login!'} />
+			<TransitionAlert open={success} setOpen={setSuccess} type={'success'} text={'Item added to cart'} />
+
 			<Footer />
 		</CssBaseline>
 	);

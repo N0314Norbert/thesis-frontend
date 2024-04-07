@@ -23,7 +23,12 @@ function ProductCard(props: any) {
 					</CardContent>
 					<CardActions disableSpacing>
 						<Typography variant="h4">{props.item.Price}</Typography>
-						<IconButton onClick={props.handleToCart} className="products-productList-card-button">
+						<IconButton
+							onClick={(event: any) => {
+								props.handleToCart(event, props.item.rowKey);
+							}}
+							className="products-productList-card-button"
+						>
 							<AddShoppingCartIcon />
 						</IconButton>
 					</CardActions>

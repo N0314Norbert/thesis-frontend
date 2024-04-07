@@ -18,7 +18,6 @@ import Profile from './Profile';
 function Header() {
 	const [accountOn, setAccount] = useState(false);
 	const isLoggedIn = KeyCloakService.CheckAuth();
-	console.log(KeyCloakService.CheckAuth());
 	const accountClicked = () => {
 		setAccount((prev) => !prev);
 	};

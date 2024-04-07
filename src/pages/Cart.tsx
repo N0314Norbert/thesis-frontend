@@ -1,27 +1,42 @@
-import { Container, CssBaseline } from '@mui/material';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button, Container, CssBaseline, Skeleton } from '@mui/material';
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ProductData } from '../@types/types';
 import CartItems from '../components/CartItems';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import PayPalComponent from '../components/PayPal';
-import { remove } from '../store/cartReducer';
+import useGetCartItems from '../hooks/useGetCartItems';
 import KeyCloakService from '../utils/keyCloak';
 
 function Cart() {
-	const cart = useSelector((state: any) => state?.CartReducer?.cart);
+	const [length, setLength] = useState(JSON.parse(Cookies.get('Cart') || '[]').length);
+	const { products, isLoading } = useGetCartItems(length);
 	useEffect(() => {
 		if (!KeyCloakService.CheckAuth()) {
 			window.location.replace(window.location.protocol + '//' + window.location.host);
 		}
 	}, []);
-	const dispatch = useDispatch();
-	const removeItem = (index: number) => {
-		dispatch(remove(index));
+
+	useEffect(() => {
+		let prodSum: number = 0;
+		products.forEach((item: ProductData) => {
+			prodSum += +item.Price;
+		});
+	}, [products]);
+
+	const removeItem = (id: string) => {
+		const retrievedArray: string[] = JSON.parse(Cookies.get('Cart') || '[]');
+		const itemIndex = retrievedArray.indexOf(id);
+		if (itemIndex > -1) {
+			retrievedArray.splice(itemIndex, 1);
+		}
+		Cookies.set('Cart', JSON.stringify(retrievedArray), { expires: 7 });
+		setLength(retrievedArray.length);
 	};
 	return (
 		<CssBaseline>
-			<Header></Header>
+			<Header />
 			<Container maxWidth="xl" className="container">
 				<Container
 					sx={{
@@ -30,13 +45,22 @@ function Cart() {
 						paddingTop: 20,
 					}}
 				>
-					<CartItems cartItems={cart} removeItem={removeItem}></CartItems>
-					<Container sx={{ ml: '25vw' }}>
-						<PayPalComponent />
-					</Container>
+					{isLoading ? (
+						<Skeleton variant="rectangular" width={800} height={350} />
+					) : (
+						<>
+							{' '}
+							<CartItems cartItems={products} removeItem={removeItem} />
+							<Link to={'/payment'}>
+								<Button variant="contained" className="PayButton">
+									Pay
+								</Button>
+							</Link>
+						</>
+					)}
 				</Container>
 			</Container>
-			<Footer></Footer>
+			<Footer />
 		</CssBaseline>
 	);
 }

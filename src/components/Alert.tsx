@@ -1,14 +1,14 @@
-import Alert from '@mui/material/Alert';
-import IconButton from '@mui/material/IconButton';
-import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
 
-function TransitionAlert({ open, setOpen }: { open: boolean; setOpen: any }) {
+function TransitionAlert({ open, setOpen, type, text }: { open: boolean; setOpen: any; type: any; text: string }) {
 	return (
 		<Collapse className="alert" in={open} sx={{ zIndex: 500, width: '100%' }}>
 			<Alert
 				variant="filled"
-				severity="error"
+				severity={type}
 				action={
 					<IconButton
 						aria-label="close"
@@ -23,7 +23,7 @@ function TransitionAlert({ open, setOpen }: { open: boolean; setOpen: any }) {
 				}
 				sx={{ mb: 2 }}
 			>
-				Please log in!
+				{text}
 			</Alert>
 		</Collapse>
 	);

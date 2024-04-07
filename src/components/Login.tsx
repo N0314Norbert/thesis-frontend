@@ -5,7 +5,6 @@ function Login(props: any) {
 	const handleSubmit = async (event: any) => {
 		event.preventDefault();
 		KeyCloakService.Login();
-		console.log(KeyCloakService.GetUserName());
 	};
 	return (
 		<Container

@@ -4,8 +4,6 @@ const initialize = (onInit: Function) => {
 	keycloakInstance
 		.init({ pkceMethod: 'S256', onLoad: 'check-sso' })
 		.then(() => {
-			if (keycloakInstance.token) {
-			}
 			onInit();
 		})
 		.catch((e) => {
@@ -22,12 +20,22 @@ const doLogin = keycloakInstance.login;
 
 const isAuth = () => keycloakInstance.authenticated;
 
+const getToken = async () => {
+	try {
+		await keycloakInstance.updateToken(30);
+		return keycloakInstance.token;
+	} catch (error) {
+		console.error('Failed to refresh token:', error);
+	}
+};
+
 const KeyCloakService = {
 	Initialize: initialize,
 	GetUserName: userName,
 	Logout: doLogout,
 	Login: doLogin,
 	CheckAuth: isAuth,
+	GetToken: getToken,
 };
 
 export default KeyCloakService;

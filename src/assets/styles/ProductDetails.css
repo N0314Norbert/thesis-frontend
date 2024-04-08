@@ -1,0 +1,32 @@
+.productDetails {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	text-align: center;
+	position: relative;
+	margin-left: 9vw;
+	margin-top: 4vh;
+}
+
+.productDetails-productImage {
+	margin-top: 100px;
+}
+
+.productDetails-description {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	text-align: center;
+	position: relative;
+	margin: 100px;
+}
+
+.productDetails-description-table {
+	min-width: 650px;
+}
+.productDetails-description-buttons {
+	display: flex;
+	flex-direction: 'row';
+	flex-wrap: 'wrap';
+	margin-top: 10vh;
+}

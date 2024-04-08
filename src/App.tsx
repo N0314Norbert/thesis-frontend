@@ -22,29 +22,13 @@ function App() {
 				<BrowserRouter>
 					<Routes>
 						<Route path="/" element={<Home />} />
-					</Routes>
-					<Routes>
 						<Route path="/faq" element={<Faq />} />
-					</Routes>
-					<Routes>
 						<Route path="/contact" element={<Contact />} />
-					</Routes>
-					<Routes>
 						<Route path="/products" element={<Products />} />
-					</Routes>
-					<Routes>
 						<Route path="/details/:id" element={<ProductDetails />} />
-					</Routes>
-					<Routes>
 						<Route path="/productviewer/:id" element={<ProductView />} />
-					</Routes>
-					<Routes>
 						<Route path="/cart" element={<Cart />} />
-					</Routes>
-					<Routes>
 						<Route path="/downloads" element={<Download />} />
-					</Routes>
-					<Routes>
 						<Route path="/payment" element={<Payment />} />
 					</Routes>
 				</BrowserRouter>

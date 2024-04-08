@@ -1,0 +1,33 @@
+.contacts-title {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 13vh;
+}
+
+.contacts-options {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding-top: 50px;
+	margin-left: 7vw;
+}
+
+.contacts-options-card {
+	max-width: 360px;
+	text-align: center;
+}
+
+.contact-email {
+	width: '600px';
+	position: 'fixed';
+	border: 'solid 1px';
+	text-align: 'center';
+}
+
+.contact-email-box {
+	margin-top: 5;
+	display: 'flex';
+	flex-direction: 'column';
+	align-items: 'center';
+}

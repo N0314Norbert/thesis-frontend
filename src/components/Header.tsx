@@ -1,15 +1,5 @@
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import {
-	AppBar,
-	Button,
-	ButtonGroup,
-	Container,
-	CssBaseline,
-	IconButton,
-	TextField,
-	Toolbar,
-	Typography,
-} from '@mui/material';
+import { AppBar, Button, ButtonGroup, Container, CssBaseline, IconButton, Toolbar, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import KeyCloakService from '../utils/keyCloak';
@@ -33,12 +23,6 @@ function Header() {
 						</Button>
 					</Link>
 					<Container sx={{ position: 'absolute', right: '-400px' }}>
-						<TextField
-							id="search-bar"
-							label="Search"
-							variant="filled"
-							sx={{ marginLeft: '40px', marginRight: '20px' }}
-						/>
 						<ButtonGroup variant="outlined" color="primary">
 							<Link to="/products">
 								<Button>

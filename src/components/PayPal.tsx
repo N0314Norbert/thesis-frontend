@@ -17,7 +17,7 @@ function PayPalComponent(props: any) {
 				amount={props.total}
 				currency={'EUR'}
 				options={{
-					clientId: 'AQztB4ncEgd2fqp6TENLIBa9myU_Lf7Bq4n9ilWk9fUM_cYPewd3Q7PC6SWx3qGJTV4rZ7bbH_ES_iH4',
+					clientId: import.meta.env.VITE_PAYPAL,
 					currency: 'EUR',
 					intent: 'capture',
 				}}
